@@ -39,7 +39,7 @@ Reward 모델을 활용하여 lip realism·motion naturalness 기반의 강화�
 
 
 
-## ✅ 3.Main 파이프라인 흐름 및 요약 (`/workspace/RL-VOCASET/main.py` 기준)
+## ✅ 3. Main 파이프라인 흐름 및 요약 (`/workspace/RL-VOCASET/main.py` 기준)
 
    1) **Hydra 설정 로드**  
       - `configs/config.yaml` 기본값: model=faceformer, dataset=style, trainer=faceformer
@@ -171,7 +171,7 @@ Reward 모델을 활용하여 lip realism·motion naturalness 기반의 강화�
    
    ---
 
-## 📁 4.Repository Structure (Demo Skeleton)
+## 📁 4 .Repository Structure (Demo Skeleton)
 ```
 RL-VOCASET/
 ├── checkpoints/              # (비어 있음) 실제 모델 가중치는 포함되지 않음
