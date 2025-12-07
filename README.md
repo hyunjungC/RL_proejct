@@ -192,7 +192,7 @@ RL-VOCASET/
 
 
 
-###📌 Notes for Reviewers / Collaborators
+### 📌 Notes for Reviewers / Collaborators
 
 * 본 문서는 연구 파이프라인 설명용 문서이며,
 실제 모델을 재현할 수 있는 정보는 포함하지 않습니다.
@@ -200,6 +200,9 @@ RL-VOCASET/
 * 요청 시 full version은 private 저장소 및 오프라인 환경에서만 공유됩니다.
 
 * 본 repo는 학습/평가 실행이 불가능하며, 구조 이해와 데모 목적만 수행합니다.
+
+
+
 
 ```bash
 ### 1) 🔧 Config 로드 (Hydra)
