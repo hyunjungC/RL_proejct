@@ -157,7 +157,7 @@ Reward 모델을 활용하여 lip realism·motion naturalness 기반의 강화�
    
    ---
    
-   ##### 🚫 포함되지 않는 항목 (Important)
+   ### 🚫 포함되지 않는 항목 (Important)
    본 공개 버전에는 아래 파일/구현이 절대 포함되지 않습니다.
    
    - 실제 학습된 모델 weight (*.pt, *.pth)
