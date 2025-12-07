@@ -4,14 +4,14 @@
 
 #  🎮 Speech-to-3D Face Animation 
 
----
+
 ## ✅ 0. Scope & Audience
 > 이 저장소는 **기술 공개 범위를 최소화한 데모용 구조(skeleton)**입니다.  
 > 실제 모델, 학습 코드, 체크포인트, 데이터셋은 **포함되어 있지 않습니다.**  
 > 본 문서는 **전체 파이프라인 이해**를 위한 요약이며,  
 > 세부 구조·차원·알고리즘은 연구 보호를 위해 공개하지 않습니다.
 
-
+---
 
 ## ✅1. Overview ([🔗 : 발표자료](https://www.canva.com/design/DAG6h43SCnU/Bg0qUI8bYz8JZkyo-mPMCg/edit?utm_content=DAG6h43SCnU&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton) )
 
