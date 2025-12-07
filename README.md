@@ -1,8 +1,17 @@
-# RL-VOCASET (Demo Skeleton)
+# RL-VOCASET 
 
-> 이 리포는 `RL_project` 기준 학습/추론 파이프라인의 구조와 흐름만 보여주는 데모용입니다. 실제 학습·모델·RL/Reward 구현과 체크포인트는 포함하지 않습니다.
+## ✅파일 역할 (핵심 시그니처만 노출)
+- `main.py` : Hydra 엔트리. config 읽고 데이터로더/모델/리워드/트레이너 객체를 엮어 train/test 실행.
+- `dataset/dataloader_style.py` : VOCASET 스타일 데이터 로더 인터페이스.
+- `models/faceformer/model.py` : FaceFormer 모델 인터페이스(오디오 → 메쉬).
+- `models/wav2vec.py` : Wav2Vec2 오디오 인코더 래퍼 인터페이스.
+- `models/reward/models/modeling.py` : SpeechMeshTransformer 백본 인터페이스.
+- `models/reward/models/head_v2.py` : Reward/critic 헤드 인터페이스.
+- `trainer/faceformer/trainer.py` : 학습/검증/테스트 함수 시그니처만 남긴 트레이너.
+- `src/utils.py` : 공용 유틸(로깅 등).
+- 
 
-## 실제 파이프라인 흐름 ( `/workspace/RL-VOCASET_my_copy_check_3/main.py` 기준 )
+## ✅실제 파이프라인 흐름 ( `/workspace/RL-VOCASET_my_copy_check_3/main.py` 기준 )
 1) **Hydra 설정 로드**  
    - `configs/config.yaml` 기본값: model=faceformer, dataset=style, trainer=faceformer
 2) **데이터 로더 준비**  
@@ -19,26 +28,14 @@
 7) **저장**  
    - `checkpoints/{wandb_name}/best.pt` 등에 모델/헤드 저장
 
-## 파일 역할 (핵심 시그니처만 노출)
-- `main.py` : Hydra 엔트리. config 읽고 데이터로더/모델/리워드/트레이너 객체를 엮어 train/test 실행.
-- `dataset/dataloader_style.py` : VOCASET 스타일 데이터 로더 인터페이스.
-- `models/faceformer/model.py` : FaceFormer 모델 인터페이스(오디오 → 메쉬).
-- `models/wav2vec.py` : Wav2Vec2 오디오 인코더 래퍼 인터페이스.
-- `models/reward/models/modeling.py` : SpeechMeshTransformer 백본 인터페이스.
-- `models/reward/models/head_v2.py` : Reward/critic 헤드 인터페이스.
-- `trainer/faceformer/trainer.py` : 학습/검증/테스트 함수 시그니처만 남긴 트레이너.
-- `src/utils.py` : 공용 유틸(로깅 등).
 
-## 데모 실행 예시 (더미 흐름)
-```bash
-# 실제 학습/모델 구현이 없는 상태에서 구조만 확인하는 예시입니다.
-python main.py  # config 로드 및 각 모듈 초기화 흐름 확인용
-```
-## 🧭 Main 파이프라인 요약 (데이터 차원 포함)
 
-# `python main.py` 실행 시 전체 흐름:
 
-# 1) 🔧 Config 로드 (Hydra)
+##  ✅Main 파이프라인 요약 (데이터 차원 포함)
+
+## `python main.py` 실행 시 전체 흐름:
+
+### 1) 🔧 Config 로드 (Hydra)
  - configs/config.yaml 불러오기
  - defaults:
      model: faceformer
@@ -47,7 +44,7 @@ python main.py  # config 로드 및 각 모듈 초기화 흐름 확인용
  - cfg.train / cfg.test 플래그에 따라 학습·평가 실행
 
 
-# 2) 📥 데이터 로딩 — dataset/dataloader_style.py
+### 2) 데이터 로딩 — dataset/dataloader_style.py
  -------------------------------------------------
 - WAV 로드 → Wav2Vec2Processor 입력값 생성
 audio: (T_audio, )
@@ -73,7 +70,7 @@ batch_onehot:  (1, num_speakers)
 batch_rep_mel: rep_audio_mel 그대로
 
 
-# 3) 🎭 Actor Model (FaceFormer) — models/faceformer/model.py
+### 3) Actor Model (FaceFormer) — models/faceformer/model.py
  -----------------------------------------------------------
 - Audio Encoder
 wav2vec2 → (1, T_audio', 768) → Linear → (1, T_audio', 64)
@@ -92,7 +89,7 @@ dist: Normal(μ,σ)                       # log_prob 계산용
 sup_loss = MSE(pred, GT)
 
 
-# 4) 🎚 Reward Backbone (고정) — SpeechMeshTransformer
+### 4) Reward Backbone (고정) — SpeechMeshTransformer
  ---------------------------------------------------
 - 입력:
 mesh_clip: (B, 5, 15069)
@@ -105,7 +102,7 @@ audio_feat:  (B, 512)
 - ckpt 로드 후 freeze, eval 모드.
 
 
-# 5) 🏅 Score Head — head_v2.py
+### 5) Score Head — head_v2.py
  --------------------------------
 - 입력:
 concat_feat: (B, 512 + 512)
@@ -118,7 +115,7 @@ value:      (B,)    # critic V(s)
  head ckpt는 학습 대상 (requires_grad=True)
 
 
-# 6) 🔁 학습 루프 — trainer/faceformer/trainer.py::train
+### 6) 학습 루프 — trainer/faceformer/trainer.py::train
  ------------------------------------------------------
 
  (1) Actor forward
@@ -141,7 +138,7 @@ total_loss = sup_loss \
 # Optimizer: Actor + Head 업데이트
 
 
-# 7) 🧪 Validation
+### 7) Validation
  ------------------------------------------------------
  - Actor deterministic forward
  - LVE(mouth vertex error) 계산
@@ -150,7 +147,7 @@ total_loss = sup_loss \
      checkpoints/<wandb_name>/best_head.pt
 
 
-# 8) 🧾 Test — trainer/faceformer/trainer.py::test
+### 8) Test — trainer/faceformer/trainer.py::test
  ------------------------------------------------------
  - best ckpt 로드
  - 모든 subject one-hot 조건별로 예측 mesh npy 저장:
