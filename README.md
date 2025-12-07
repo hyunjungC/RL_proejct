@@ -64,14 +64,14 @@ Config 로드 → 데이터 준비 → Actor 모델 추론 → Reward 평가 →
 
 ---
 
-### 2) 🔧 Config & Environment Loading
+#### 2) 🔧 Config & Environment Loading
 - Hydra 기반 설정 로딩
 - 모델 종류, 데이터셋 타입, 학습/평가 옵션을 포함한 high-level configuration
 - 실제 training parameter, architecture detail은 비공개
 
 ---
 
-### 3) 🎧 Data Loader (Audio & Mesh Preparation)
+#### 3) 🎧 Data Loader (Audio & Mesh Preparation)
 입력으로 사용되는 데이터는 다음과 같은 형태로 구성됩니다.
 
 ##### 포함 요소
@@ -92,7 +92,7 @@ Config 로드 → 데이터 준비 → Actor 모델 추론 → Reward 평가 →
 
 ---
 
-### 4) 🧑‍🏫 Actor Model (Face Animation Generator)
+#### 4) 🧑‍🏫 Actor Model (Face Animation Generator)
 Actor 모델은 다음 기능을 수행합니다.
 
 ##### 모델 역할
