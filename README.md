@@ -1,4 +1,8 @@
 # RL-VOCASET 
+''' bash
+#✅
+
+'''
 
 ## ✅파일 역할 (핵심 시그니처만 노출)
 - `main.py` : Hydra 엔트리. config 읽고 데이터로더/모델/리워드/트레이너 객체를 엮어 train/test 실행.
