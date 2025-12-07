@@ -11,7 +11,12 @@
 ##### ✔ 정량적 오차 최소화(MSE, L2) 자체가 목적이 아니라,
 
 ##### ✔ 사람이 보았을 때 '자연스럽다'고 느끼는 입모양, 얼굴 움직임, 타이밍, 표현력
+
 을 생성하는 데 초점을 둡니다.
+이를 위해 Actor 모델(FaceFormer)의 출력에 대해
+Reward 모델을 활용하여 lip realism·motion naturalness 기반의 강화학습 신호를 부여함으로써,
+정확도 중심의 supervised learning을 넘어 더 사람다운(face-like) 움직임을 학습하도록 설계했습니다.
+
 
 ```bash
 ✅
