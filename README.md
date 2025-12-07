@@ -22,8 +22,9 @@ Reward 모델을 활용하여 lip realism·motion naturalness 기반의 강화�
 ✅
 ```
 
-```markdown
+
 ## ✅ 구조 및 파일 역할
+```
 RL-VOCASET_my_copy_check_3_copy/
 ├── pycache/
 ├── checkpoints/
