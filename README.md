@@ -34,6 +34,8 @@ RL-VOCASET/
 │ └── config.yaml
 ├── dataset/
 ├── models/
+│ ├── faceformer/
+│ └── reward/
 ├── src/
 ├── trainer/
 ├── utils/
