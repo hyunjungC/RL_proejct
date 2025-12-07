@@ -1,8 +1,12 @@
 # RL-VOCASET 
+```markdown
+#  🎮 FaceFormer 강화학습 프로젝트
+
+
 ```bash
 ✅
 ```
-
+```bash
 ## ✅파일 역할 (핵심 시그니처만 노출)
 - `main.py` : Hydra 엔트리. config 읽고 데이터로더/모델/리워드/트레이너 객체를 엮어 train/test 실행.
 - `dataset/dataloader_style.py` : VOCASET 스타일 데이터 로더 인터페이스.
@@ -12,7 +16,8 @@
 - `models/reward/models/head_v2.py` : Reward/critic 헤드 인터페이스.
 - `trainer/faceformer/trainer.py` : 학습/검증/테스트 함수 시그니처만 남긴 트레이너.
 - `src/utils.py` : 공용 유틸(로깅 등).
-- 
+```
+
 
 ## ✅실제 파이프라인 흐름 ( `/workspace/RL-VOCASET_my_copy_check_3/main.py` 기준 )
 1) **Hydra 설정 로드**  
