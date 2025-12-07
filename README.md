@@ -58,7 +58,7 @@ Reward 모델을 활용하여 lip realism·motion naturalness 기반의 강화�
 ##  ✅Main 파이프라인 요약 (데이터 차원 포함)
 
 ## `python main.py` 실행 시 전체 흐름:
-
+```bash
 ### 1) 🔧 Config 로드 (Hydra)
  - configs/config.yaml 불러오기
  - defaults:
@@ -193,7 +193,7 @@ total_loss = sup_loss \
 - 리워드 백본/헤드 ckpt: `checkpoints/reward/model_loss.pth`, `checkpoints/reward/v4_best.pt`  
 데모 리포에는 위 파일이 포함되지 않습니다.
 
-
+```
 
 
 
