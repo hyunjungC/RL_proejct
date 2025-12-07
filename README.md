@@ -58,7 +58,7 @@ RL-VOCASET/
 ```
 
 
-## ✅실제 파이프라인 흐름 ( `/workspace/RL-VOCASET_my_copy_check_3/main.py` 기준 )
+##  ✅Main 파이프라인 흐름 및 요약 (`/workspace/RL-VOCASET/main.py` 기준)
 1) **Hydra 설정 로드**  
    - `configs/config.yaml` 기본값: model=faceformer, dataset=style, trainer=faceformer
 2) **데이터 로더 준비**  
@@ -74,12 +74,6 @@ RL-VOCASET/
    - 같은 트레이너에서 style-dependent 테스트 수행
 7) **저장**  
    - `checkpoints/{wandb_name}/best.pt` 등에 모델/헤드 저장
-
-
-
-
-##  ✅Main 파이프라인 요약 (데이터 차원 포함)
-
 ## `python main.py` 실행 시 전체 흐름:
 ```bash
 ### 1) 🔧 Config 로드 (Hydra)
