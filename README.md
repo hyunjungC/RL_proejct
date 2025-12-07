@@ -22,8 +22,6 @@
 
 
 
-https://github.com/user-attachments/assets/43d18139-1dec-476a-9c60-8615da24fb36
-
 
 ## ✅2. Project Goals
 
