@@ -59,7 +59,7 @@ Reward 모델을 활용하여 lip realism·motion naturalness 기반의 강화�
    ### 1) Main Workflow Summary (`python main.py`)
    모델을 실행하면 아래와 같은 순서로 파이프라인이 진행됩니다.
    
-   ✔ Config 로드 → 데이터 준비 → Actor 모델 추론 → Reward 평가 → RL 학습 → Validation/Test
+   ##### ✔ Config 로드 → 데이터 준비 → Actor 모델 추론 → Reward 평가 → RL 학습 → Validation/Test
    
    각 과정의 목적만 설명하며 **구체적인 구현, 수식, 차원 정보는 포함하지 않습니다.**
    
