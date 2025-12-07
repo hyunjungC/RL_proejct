@@ -18,8 +18,6 @@
 
 
 
-https://github.com/user-attachments/assets/3699e22f-c586-47de-855f-1e5e92084118 / https://github.com/user-attachments/assets/99fce03f-fc62-4a03-8960-861d05a5cf09
-
 
 
 
