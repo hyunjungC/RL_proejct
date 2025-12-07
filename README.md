@@ -229,6 +229,145 @@ RL-VOCASET/
 
 
 
+### 1) 🔧 Config 로드 (Hydra)
+ - configs/config.yaml 불러오기
+ - defaults:
+     model: faceformer
+     dataset: style
+     trainer: faceformer
+ - cfg.train / cfg.test 플래그에 따라 학습·평가 실행
+
+
+### 2) 데이터 로딩 — dataset/dataloader_style.py
+ -------------------------------------------------
+- WAV 로드 → Wav2Vec2Processor 입력값 생성
+audio: (T_audio, )
+
+- Mel 특징(rep_audio_mel) — Reward 모델용
+rep_audio_mel: (T_clip, 1, 20, 128)
+
+- Template mesh
+template: (5023, 3) → flatten → (15069,)
+
+- GT vertex 시퀀스 (2프레임 샘플링 적용)
+vertice: (seq_len, 15069)
+
+- Subject one-hot
+one_hot_train:     (num_speakers,)
+one_hot_val_test:  (num_speakers_all, num_speakers)
+
+- DataLoader 배치 (batch=1)
+batch_audio:   (1, T_audio)
+batch_vertice: (1, seq_len, 15069)
+batch_template:(1, 15069)
+batch_onehot:  (1, num_speakers)
+batch_rep_mel: rep_audio_mel 그대로
+
+
+### 3) Actor Model (FaceFormer) — models/faceformer/model.py
+ -----------------------------------------------------------
+- Audio Encoder
+wav2vec2 → (1, T_audio', 768) → Linear → (1, T_audio', 64)
+
+- Transformer Decoder 입력:
+ - template displacement
+ - style embedding(one_hot)
+ - PPE, temporal bias 등 포함
+
+- 출력:
+vertice_mu:     (1, seq_len, 15069)     # mean
+vertice_sample: (1, seq_len, 15069)     # stochastic mode일 때
+dist: Normal(μ,σ)                       # log_prob 계산용
+
+- Supervised Loss:
+sup_loss = MSE(pred, GT)
+
+
+### 4) Reward Backbone (고정) — SpeechMeshTransformer
+ ---------------------------------------------------
+- 입력:
+mesh_clip: (B, 5, 15069)
+mel_clip:  (B, 1, 20, 128)
+
+- 출력 임베딩:
+vertex_feat: (B, 512)
+audio_feat:  (B, 512)
+
+- ckpt 로드 후 freeze, eval 모드.
+
+
+### 5) Score Head — head_v2.py
+ --------------------------------
+- 입력:
+concat_feat: (B, 512 + 512)
+
+- 출력:
+lip_score:  (B,)    # sigmoid
+real_score: (B,)    # sigmoid
+value:      (B,)    # critic V(s)
+
+ head ckpt는 학습 대상 (requires_grad=True)
+
+
+### 6) 학습 루프 — trainer/faceformer/trainer.py::train
+ ------------------------------------------------------
+
+ (1) Actor forward
+vertice_mu, vertice_sample, sup_loss
+
+ (2) Reward 계산
+ rep_audio_mel → 5프레임 단위 슬라이딩 → backbone → head
+lip, real, value = mean over clips
+
+reward    = (lip + real) * reward_scale
+advantage = reward - value
+
+actor_loss  = -advantage * mean(log_prob(sample))     # stochastic인 경우
+critic_loss = (reward - value) ** 2
+
+total_loss = sup_loss \\
+           + actor_weight  * actor_loss \\
+           + critic_weight * critic_loss
+
+ Optimizer: Actor + Head 업데이트
+
+
+### 7) Validation
+ ------------------------------------------------------
+ - Actor deterministic forward
+ - LVE(mouth vertex error) 계산
+ - best 성능 시 ckpt 저장:
+     checkpoints/<wandb_name>/best.pt
+     checkpoints/<wandb_name>/best_head.pt
+
+
+### 8) Test — trainer/faceformer/trainer.py::test
+ ------------------------------------------------------
+ - best ckpt 로드
+ - 모든 subject one-hot 조건별로 예측 mesh npy 저장:
+   checkpoints/<wandb_name>/styledependant/results/*.npy
+ - LVE / FDD 계산 출력
+ - style-independent 모드: 모든 one-hot 평균값 사용
+
+
+
+## 포함되지 않는 것
+- 실제 학습/추론 구현 상세, RL/Reward 내부 로직
+- 체크포인트(.pt), 데이터(wav, mel npy, vertices npy, templates, masks)
+
+## 실제 데이터/체크포인트를 쓸 경우 필요한 경로 (참고용)
+ 오디오: `vocaset/wav/`
+- 멜 스펙트럼: `vocaset/wav_npy/`
+- 메쉬 GT: `vocaset/vertices_npy/`
+- 템플릿/마스크: `vocaset/templates.pkl`, `vocaset/FLAME_masks.pkl`
+- 리워드 백본/헤드 ckpt: `checkpoints/reward/model_loss.pth`, `checkpoints/reward/v4_best.pt`
+데모 리포에는 위 파일이 포함되지 않습니다.
+
+
+
+
+
+
 
 
 
