@@ -21,8 +21,9 @@ Reward 모델을 활용하여 lip realism·motion naturalness 기반의 강화�
 ```bash
 ✅
 ```
-```bash
+
 ## ✅파일 역할 (핵심 시그니처만 노출)
+```bash
 - `main.py` : Hydra 엔트리. config 읽고 데이터로더/모델/리워드/트레이너 객체를 엮어 train/test 실행.
 - `dataset/dataloader_style.py` : VOCASET 스타일 데이터 로더 인터페이스.
 - `models/faceformer/model.py` : FaceFormer 모델 인터페이스(오디오 → 메쉬).
