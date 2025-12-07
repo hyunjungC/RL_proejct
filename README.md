@@ -10,7 +10,7 @@
 
 
 #  🎮 Speech-to-3D Face Animation 
-([🔗 : 발표자료](https://www.canva.com/design/DAG6h43SCnU/Bg0qUI8bYz8JZkyo-mPMCg/edit?utm_content=DAG6h43SCnU&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton). )
+([🔗 : 발표자료](https://www.canva.com/design/DAG6h43SCnU/Bg0qUI8bYz8JZkyo-mPMCg/edit?utm_content=DAG6h43SCnU&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton) )
 
 
 본 프로젝트의 최종 목표는 입력 음성에 맞추어 자연스럽게 움직이는 3D 얼굴 메쉬/영상을 생성하는 것입니다.
