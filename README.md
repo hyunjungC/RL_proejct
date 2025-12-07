@@ -188,16 +188,6 @@ RL-VOCASET/
 ```
 
 
-```bash
-- `main.py` : Hydra 엔트리. config 읽고 데이터로더/모델/리워드/트레이너 객체를 엮어 train/test 실행.
-- `dataset/dataloader_style.py` : VOCASET 스타일 데이터 로더 인터페이스.
-- `models/faceformer/model.py` : FaceFormer 모델 인터페이스(오디오 → 메쉬).
-- `models/wav2vec.py` : Wav2Vec2 오디오 인코더 래퍼 인터페이스.
-- `models/reward/models/modeling.py` : SpeechMeshTransformer 백본 인터페이스.
-- `models/reward/models/head_v2.py` : Reward/critic 헤드 인터페이스.
-- `trainer/faceformer/trainer.py` : 학습/검증/테스트 함수 시그니처만 남긴 트레이너.
-- `src/utils.py` : 공용 유틸(로깅 등).
-```
 
 
 
