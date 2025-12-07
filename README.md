@@ -80,12 +80,12 @@ wav2vec2 → (1, T_audio', 768) → Linear → (1, T_audio', 64)
  - style embedding(one_hot)
  - PPE, temporal bias 등 포함
 
-# 출력:
+- 출력:
 vertice_mu:     (1, seq_len, 15069)     # mean
 vertice_sample: (1, seq_len, 15069)     # stochastic mode일 때
 dist: Normal(μ,σ)                       # log_prob 계산용
 
-# Supervised Loss:
+- Supervised Loss:
 sup_loss = MSE(pred, GT)
 
 
@@ -135,7 +135,7 @@ total_loss = sup_loss \
            + actor_weight  * actor_loss \
            + critic_weight * critic_loss
 
-# Optimizer: Actor + Head 업데이트
+ Optimizer: Actor + Head 업데이트
 
 
 ### 7) Validation
