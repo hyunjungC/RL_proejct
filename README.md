@@ -48,7 +48,7 @@ Reward 모델을 활용하여 lip realism·motion naturalness 기반의 강화�
    - 같은 트레이너에서 style-dependent 테스트 수행
 7) **저장**  
    - `checkpoints/{wandb_name}/best.pt` 등에 모델/헤드 저장
-##  1. Main Workflow Summary (`python main.py`)
+###  1. Main Workflow Summary (`python main.py`)
 모델을 실행하면 아래와 같은 순서로 파이프라인이 진행됩니다.
 
 Config 로드 → 데이터 준비 → Actor 모델 추론 → Reward 평가 → RL 학습 → Validation/Test
@@ -57,17 +57,17 @@ Config 로드 → 데이터 준비 → Actor 모델 추론 → Reward 평가 →
 
 ---
 
-# 2. 🔧 Config & Environment Loading
+### 2. 🔧 Config & Environment Loading
 - Hydra 기반 설정 로딩
 - 모델 종류, 데이터셋 타입, 학습/평가 옵션을 포함한 high-level configuration
 - 실제 training parameter, architecture detail은 비공개
 
 ---
 
-# 3. 🎧 Data Loader (Audio & Mesh Preparation)
+### 3. 🎧 Data Loader (Audio & Mesh Preparation)
 입력으로 사용되는 데이터는 다음과 같은 형태로 구성됩니다.
 
-### 포함 요소
+##### 포함 요소
 - **음성 신호**  
   - waveform → 음성 인코더가 처리할 수 있는 embedding으로 변환
 - **멜 스펙트럼 특징**  
@@ -79,22 +79,22 @@ Config 로드 → 데이터 준비 → Actor 모델 추론 → Reward 평가 →
 - **Subject Embedding**  
   - 화자 조건 부여(원핫 or 임베딩)
 
-### 비공개 요소
+##### 비공개 요소
 - 데이터 차원 및 내부 전처리 로직
 - wav2vec/mesh loader 등의 구체 구현
 
 ---
 
-# 4. 🧑‍🏫 Actor Model (Face Animation Generator)
+### 4. 🧑‍🏫 Actor Model (Face Animation Generator)
 Actor 모델은 다음 기능을 수행합니다.
 
-### 모델 역할
+##### 모델 역할
 - 음성 인코더가 추출한 speech embedding과  
   template mesh · subject 정보 등을 결합하여  
   **타임라인에 따른 3D 얼굴 메쉬 시퀀스를 생성**합니다.
 - deterministic / stochastic 두 가지 모드로 실행 가능
 
-### 비공개(연구 보호) 처리
+##### 비공개(연구 보호) 처리
 - 인코더 구조, 차원, attention/bias 구조, normalization 방식
 - mesh representation 차원
 - distribution 기반 sampling 공식
@@ -102,21 +102,21 @@ Actor 모델은 다음 기능을 수행합니다.
 
 ---
 
-# 5. ⭐ Reward Model (Freeze된 품질 평가 네트워크)
+### 5. ⭐ Reward Model (Freeze된 품질 평가 네트워크)
 학습 시 actor가 생성한 mesh를 평가하기 위해 **별도의 품질 측정 모델**을 사용합니다.
 
-### 기능
+##### 기능
 - 오디오–메쉬 간 **lip-sync**, **realism**, **temporal consistency** 등을 측정  
 - freeze 상태로 사용되며, actor 업데이트를 위한 reward를 제공
 
-### 비공개 처리
+##### 비공개 처리
 - backbone/score-head architecture  
 - 입력 clip 형식, 차원  
 - score 계산 방식  
 
 ---
 
-# 6. 🧠 Reinforcement Learning Loop (High-Level Description Only)
+### 6. 🧠 Reinforcement Learning Loop (High-Level Description Only)
 본 프로젝트는 supervised loss와 reinforcement signal을 함께 사용합니다.
 
 ### 전체 흐름
