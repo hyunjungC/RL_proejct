@@ -10,8 +10,8 @@
 
 #  🎮 Speech-to-3D Face Animation 
 
-## ✅1. Overview
-([🔗 : 발표자료](https://www.canva.com/design/DAG6h43SCnU/Bg0qUI8bYz8JZkyo-mPMCg/edit?utm_content=DAG6h43SCnU&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton) )
+## ✅1. Overview ([🔗 : 발표자료](https://www.canva.com/design/DAG6h43SCnU/Bg0qUI8bYz8JZkyo-mPMCg/edit?utm_content=DAG6h43SCnU&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton) )
+
 
 <img width="1345" height="479" alt="image" src="https://github.com/user-attachments/assets/eb7943ce-6e47-4447-a66b-6fff0682a755" />
 
