@@ -10,6 +10,10 @@
 
 
 #  🎮 Speech-to-3D Face Animation 
+
+
+
+
 ([🔗 : 발표자료](https://www.canva.com/design/DAG6h43SCnU/Bg0qUI8bYz8JZkyo-mPMCg/edit?utm_content=DAG6h43SCnU&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton) )
 
 
@@ -205,6 +209,15 @@ RL-VOCASET/
 
 
 
+
+
+
+
+
+
+
+---
+이거는 빼야할듯.
 ```bash
 ### 1) 🔧 Config 로드 (Hydra)
  - configs/config.yaml 불러오기
