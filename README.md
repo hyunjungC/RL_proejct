@@ -119,7 +119,7 @@ Actor 모델은 다음 기능을 수행합니다.
 ### 6. 🧠 Reinforcement Learning Loop (High-Level Description Only)
 본 프로젝트는 supervised loss와 reinforcement signal을 함께 사용합니다.
 
-### 전체 흐름
+##### 전체 흐름
 1) Actor가 예측 메쉬 생성  
 2) Reward 모델이 품질 점수 계산  
 3) Critic이 예측 안정성을 돕는 방향으로 평가  
@@ -127,7 +127,7 @@ Actor 모델은 다음 기능을 수행합니다.
 5) Critic은 reward를 더 잘 예측하도록 업데이트  
 6) Supervised 학습과 RL 신호가 함께 최종 loss 구성
 
-### 비공개 처리
+##### 비공개 처리
 - advantage 계산식  
 - actor/critic loss 공식  
 - weight/scale 값  
@@ -135,20 +135,20 @@ Actor 모델은 다음 기능을 수행합니다.
 
 ---
 
-# 7. 🧪 Validation
+### 7. 🧪 Validation
 - deterministic 모드로 mesh를 생성하여 품질 지표를 기록  
 - LVE·FDD 등 일부 지표는 내부 reference에 의해 계산되나 공개 범위 최소화
 
 ---
 
-# 8. 🧫 Test / Inference (Demo Version)
+### 8. 🧫 Test / Inference (Demo Version)
 - best checkpoint가 주어질 경우 전체 subject 조건에서 메쉬 생성  
 - 결과는 .npy 또는 .obj 등 다양한 포맷으로 저장 가능  
 - public repo에는 checkpoint가 포함되지 않으며, demo용 dummy predictor만 제공됨
 
 ---
 
-# 🚫 포함되지 않는 항목 (Important)
+##### 🚫 포함되지 않는 항목 (Important)
 본 공개 버전에는 아래 파일/구현이 절대 포함되지 않습니다.
 
 - 실제 학습된 모델 weight (*.pt, *.pth)
@@ -162,29 +162,29 @@ Actor 모델은 다음 기능을 수행합니다.
 
 ---
 
-## 📁 Repository Structure (Demo Skeleton)
+### 📁 Repository Structure (Demo Skeleton)
 ```
 RL-VOCASET/
-├── pycache/
-├── checkpoints/
-├── configs/
-│ ├── dataset/
-│ ├── model/
-│ ├── trainer/
-│ └── config.yaml
-├── dataset/
-├── models/
-│ ├── faceformer/
-│ └── reward/
-├── src/
-├── trainer/
-├── utils/
-├── vocaset/
+├── checkpoints/              # (비어 있음) 실제 모델 가중치는 포함되지 않음
+├── configs/                  # Hydra 기반 설정 파일 구조
+│   ├── dataset/              # 데이터 로딩 관련 옵션 
+│   ├── model/                # 모델 설정 placeholder
+│   ├── trainer/              # 학습/평가 설정 placeholder
+│   └── config.yaml           # 기본 엔트리 설정
+├── dataset/                  # VOCASET 스타일 데이터 로더 인터페이스
+├── models/                   # 모델 인터페이스 구조
+│   ├── faceformer/           # Actor(생성 모델) 인터페이스(오디오 → 메쉬).
+│   └── reward/               # Reward 평가 모델 인터페이스
+├── src/                     
+├── trainer/                  # 학습/검증/평가 흐름 skeleton
+├── utils/                    
+├── vocaset/                  # (비어 있음) 실제 데이터 포함되지 않음
 ├── .gitignore
-├── main.py 
+├── main.py                   # Hydra 엔트리 포인트
 ├── README.md
-├── render.py
-└── reward_score.py
+├── render.py                 # 결과 렌더링/시각화용 placeholder
+└── reward_score.py           # Reward 계산 
+
 ```
 
 
