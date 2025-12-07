@@ -1,41 +1,179 @@
-# 🚀 RL-VOCASET 
+# RL-VOCASET (Demo Skeleton)
 
-이 저장소는 RL-VOCASET의 전체 코드, Docker 환경, Checkpoint 다운로드 링크,  
-그리고 학습 및 추론 방법을 포함하고 있습니다.  
+> 이 리포는 `/workspace/RL-VOCASET_my_copy_check_3` 기준 학습/추론 파이프라인의 구조와 흐름만 보여주는 데모용입니다. 실제 학습·모델·RL/Reward 구현과 체크포인트는 포함하지 않습니다.
 
-> ⚠️ **주의:** 이 저장소는 직접 수정하지 마세요!  
-> 작업 시 반드시 **Fork** 후 개인 저장소에서 진행하세요.
----
+## 실제 파이프라인 흐름 ( `/workspace/RL-VOCASET_my_copy_check_3/main.py` 기준 )
+1) **Hydra 설정 로드**  
+   - `configs/config.yaml` 기본값: model=faceformer, dataset=style, trainer=faceformer
+2) **데이터 로더 준비**  
+   - `dataset/dataloader_style.py` 로 wav → mel, vertices, template 로드
+3) **Actor 모델 빌드**  
+   - `models/faceformer/model.py` (오디오 인코더 `models/wav2vec.py` 포함)
+4) **Reward 백본/헤드 로드**  
+   - `models/reward/models/modeling.py` (SpeechMeshTransformer)  
+   - `models/reward/models/head_v2.py` (lip/real/value 헤드)
+5) **학습 루프**  
+   - `trainer/faceformer/trainer.py`에서 sup loss + RL(actor/critic) 조합 학습
+6) **테스트**  
+   - 같은 트레이너에서 style-dependent 테스트 수행
+7) **저장**  
+   - `checkpoints/{wandb_name}/best.pt` 등에 모델/헤드 저장
 
-# 💪 TODO List  
-- [X] style(codetalker, faceformer), no-style(selftalk) 이해 및 Metric
-- [ ] Add Codetalker
-- [ ] Checkpoints Huggingface upload
-- [ ] Datasets Huggingface Upload
-- [ ] Reinforcement Learning Optimization (PPO)
-- [ ] Reinforcement Learning Optimization (GRPO)
-- [ ] Reward Model Dataset build Code
-- [ ] Reward Model Training Code
-- [ ] Reward Model 개선
+## 파일 역할 (핵심 시그니처만 노출)
+- `main.py` : Hydra 엔트리. config 읽고 데이터로더/모델/리워드/트레이너 객체를 엮어 train/test 실행.
+- `dataset/dataloader_style.py` : VOCASET 스타일 데이터 로더 인터페이스.
+- `models/faceformer/model.py` : FaceFormer 모델 인터페이스(오디오 → 메쉬).
+- `models/wav2vec.py` : Wav2Vec2 오디오 인코더 래퍼 인터페이스.
+- `models/reward/models/modeling.py` : SpeechMeshTransformer 백본 인터페이스.
+- `models/reward/models/head_v2.py` : Reward/critic 헤드 인터페이스.
+- `trainer/faceformer/trainer.py` : 학습/검증/테스트 함수 시그니처만 남긴 트레이너.
+- `src/utils.py` : 공용 유틸(로깅 등).
+
+## 데모 실행 예시 (더미 흐름)
+```bash
+# 실제 학습/모델 구현이 없는 상태에서 구조만 확인하는 예시입니다.
+python main.py  # config 로드 및 각 모듈 초기화 흐름 확인용
+```
+## 🧭 Main 파이프라인 요약 (데이터 차원 포함)
+
+# `python main.py` 실행 시 전체 흐름:
+
+# 1) 🔧 Config 로드 (Hydra)
+# - configs/config.yaml 불러오기
+# - defaults:
+#     model: faceformer
+#     dataset: style
+#     trainer: faceformer
+# - cfg.train / cfg.test 플래그에 따라 학습·평가 실행
 
 
-## 📘 1. GitHub 사용법
+# 2) 📥 데이터 로딩 — dataset/dataloader_style.py
+# -------------------------------------------------
+# WAV 로드 → Wav2Vec2Processor 입력값 생성
+audio: (T_audio, )
 
-### 🔹 저장소 Fork 및 Clone
-1. 상단의 **Fork** 버튼을 클릭하여 개인 계정으로 복제합니다.
-2. Fork된 저장소에서 아래 명령어로 클론합니다.
-   ```bash
-   git clone https://github.com/<your-username>/RL-VOCA.git
+# Mel 특징(rep_audio_mel) — Reward 모델용
+rep_audio_mel: (T_clip, 1, 20, 128)
 
-## 📘 2. Environment Setting
-   ```bash
-   docker pull esh0504/project:RL-VOCASET
-   docker run -it --gpus all -v RL-VOCASET:/workspace -v /data/vocaset:/data/vocaset esh0504/project:RL-VOCA
-   ```
-## 📘 3. Reward Model Checkpoints
-- encoder: [link](https://drive.google.com/file/d/10bYZp4-O23HFdriY7AfF3iYn8LH5vOfn/view?usp=drive_link)
-- head: [link](https://drive.google.com/file/d/1V4yeorO4buESqAnwnzow9dddRrKyLXA6/view?usp=drive_link)
+# Template mesh
+template: (5023, 3) → flatten → (15069,)
 
-## 📘 4. Train (you can setting your config file (in configs/config.yaml).
-python main.py
+# GT vertex 시퀀스 (2프레임 샘플링 적용)
+vertice: (seq_len, 15069)
+
+# Subject one-hot
+one_hot_train:     (num_speakers,)
+one_hot_val_test:  (num_speakers_all, num_speakers)
+
+# DataLoader 배치 (batch=1)
+batch_audio:   (1, T_audio)
+batch_vertice: (1, seq_len, 15069)
+batch_template:(1, 15069)
+batch_onehot:  (1, num_speakers)
+batch_rep_mel: rep_audio_mel 그대로
+
+
+# 3) 🎭 Actor Model (FaceFormer) — models/faceformer/model.py
+# -----------------------------------------------------------
+# Audio Encoder
+wav2vec2 → (1, T_audio', 768) → Linear → (1, T_audio', 64)
+
+# Transformer Decoder 입력:
+# - template displacement
+# - style embedding(one_hot)
+# - PPE, temporal bias 등 포함
+
+# 출력:
+vertice_mu:     (1, seq_len, 15069)     # mean
+vertice_sample: (1, seq_len, 15069)     # stochastic mode일 때
+dist: Normal(μ,σ)                       # log_prob 계산용
+
+# Supervised Loss:
+sup_loss = MSE(pred, GT)
+
+
+# 4) 🎚 Reward Backbone (고정) — SpeechMeshTransformer
+# ---------------------------------------------------
+# 입력:
+mesh_clip: (B, 5, 15069)
+mel_clip:  (B, 1, 20, 128)
+
+# 출력 임베딩:
+vertex_feat: (B, 512)
+audio_feat:  (B, 512)
+
+# ckpt 로드 후 freeze, eval 모드.
+
+
+# 5) 🏅 Score Head — head_v2.py
+# --------------------------------
+# 입력:
+concat_feat: (B, 512 + 512)
+
+# 출력:
+lip_score:  (B,)    # sigmoid
+real_score: (B,)    # sigmoid
+value:      (B,)    # critic V(s)
+
+# head ckpt는 학습 대상 (requires_grad=True)
+
+
+# 6) 🔁 학습 루프 — trainer/faceformer/trainer.py::train
+# ------------------------------------------------------
+
+# (1) Actor forward
+vertice_mu, vertice_sample, sup_loss
+
+# (2) Reward 계산
+# rep_audio_mel → 5프레임 단위 슬라이딩 → backbone → head
+lip, real, value = mean over clips
+
+reward    = (lip + real) * reward_scale
+advantage = reward - value
+
+actor_loss  = -advantage * mean(log_prob(sample))     # stochastic인 경우
+critic_loss = (reward - value) ** 2
+
+total_loss = sup_loss \
+           + actor_weight  * actor_loss \
+           + critic_weight * critic_loss
+
+# Optimizer: Actor + Head 업데이트
+
+
+# 7) 🧪 Validation
+# ------------------------------------------------------
+# - Actor deterministic forward
+# - LVE(mouth vertex error) 계산
+# - best 성능 시 ckpt 저장:
+#     checkpoints/<wandb_name>/best.pt
+#     checkpoints/<wandb_name>/best_head.pt
+
+
+# 8) 🧾 Test — trainer/faceformer/trainer.py::test
+# ------------------------------------------------------
+# - best ckpt 로드
+# - 모든 subject one-hot 조건별로 예측 mesh npy 저장:
+#   checkpoints/<wandb_name>/styledependant/results/*.npy
+# - LVE / FDD 계산 출력
+# - style-independent 모드: 모든 one-hot 평균값 사용
+
+
+
+## 포함되지 않는 것
+- 실제 학습/추론 구현 상세, RL/Reward 내부 로직
+- 체크포인트(.pt), 데이터(wav, mel npy, vertices npy, templates, masks)
+
+## 실제 데이터/체크포인트를 쓸 경우 필요한 경로 (참고용)
+- 오디오: `vocaset/wav/`  
+- 멜 스펙트럼: `vocaset/wav_npy/`  
+- 메쉬 GT: `vocaset/vertices_npy/`  
+- 템플릿/마스크: `vocaset/templates.pkl`, `vocaset/FLAME_masks.pkl`  
+- 리워드 백본/헤드 ckpt: `checkpoints/reward/model_loss.pth`, `checkpoints/reward/v4_best.pt`  
+데모 리포에는 위 파일이 포함되지 않습니다.
+
+
+
+
+
 
