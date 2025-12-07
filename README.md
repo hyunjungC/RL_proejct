@@ -2,6 +2,8 @@
 # RL-project
 ```
 
+
+
 #  🎮 FaceFormer 강화학습 프로젝트 
 
 본 프로젝트의 최종 목표는 입력 음성에 맞추어 자연스럽게 움직이는 3D 얼굴 메쉬/영상을 생성하는 것입니다.
@@ -17,10 +19,7 @@
 Reward 모델을 활용하여 lip realism·motion naturalness 기반의 강화학습 신호를 부여함으로써,
 정확도 중심의 supervised learning을 넘어 더 사람다운(face-like) 움직임을 학습하도록 설계했습니다.
 
-
-```bash
-✅
-```
+<img width="1345" height="479" alt="image" src="https://github.com/user-attachments/assets/eb7943ce-6e47-4447-a66b-6fff0682a755" />
 
 
 ## ✅ 구조 및 파일 역할
