@@ -190,7 +190,7 @@ Reward 모델을 활용하여 lip realism·motion naturalness 기반의 강화�
    
    ---
 
-##  5 .Repository Structure (Demo Skeleton)
+##  ✅5. Repository Structure (Demo Skeleton)
 ```
 RL-VOCASET/
 ├── checkpoints/              # (비어 있음) 실제 모델 가중치는 포함되지 않음
