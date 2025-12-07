@@ -83,7 +83,120 @@ RL-VOCASET/
    - 같은 트레이너에서 style-dependent 테스트 수행
 7) **저장**  
    - `checkpoints/{wandb_name}/best.pt` 등에 모델/헤드 저장
-## `python main.py` 실행 시 전체 흐름:
+##  1. Main Workflow Summary (`python main.py`)
+모델을 실행하면 아래와 같은 순서로 파이프라인이 진행됩니다.
+
+Config 로드 → 데이터 준비 → Actor 모델 추론 → Reward 평가 → RL 학습 → Validation/Test
+
+각 과정의 목적만 설명하며 **구체적인 구현, 수식, 차원 정보는 포함하지 않습니다.**
+
+---
+
+# 2. 🔧 Config & Environment Loading
+- Hydra 기반 설정 로딩
+- 모델 종류, 데이터셋 타입, 학습/평가 옵션을 포함한 high-level configuration
+- 실제 training parameter, architecture detail은 비공개
+
+---
+
+# 3. 🎧 Data Loader (Audio & Mesh Preparation)
+입력으로 사용되는 데이터는 다음과 같은 형태로 구성됩니다.
+
+### 포함 요소
+- **음성 신호**  
+  - waveform → 음성 인코더가 처리할 수 있는 embedding으로 변환
+- **멜 스펙트럼 특징**  
+  - Reward 모델에서 품질 평가에 참고되는 보조 오디오 표현
+- **Template Mesh**  
+  - 한 얼굴 template에 대해 displacement를 예측하는 방식
+- **Ground Truth Mesh Sequence**  
+  - time-aligned mesh 시퀀스
+- **Subject Embedding**  
+  - 화자 조건 부여(원핫 or 임베딩)
+
+### 비공개 요소
+- 데이터 차원 및 내부 전처리 로직
+- wav2vec/mesh loader 등의 구체 구현
+
+---
+
+# 4. 🧑‍🏫 Actor Model (Face Animation Generator)
+Actor 모델은 다음 기능을 수행합니다.
+
+### 모델 역할
+- 음성 인코더가 추출한 speech embedding과  
+  template mesh · subject 정보 등을 결합하여  
+  **타임라인에 따른 3D 얼굴 메쉬 시퀀스를 생성**합니다.
+- deterministic / stochastic 두 가지 모드로 실행 가능
+
+### 비공개(연구 보호) 처리
+- 인코더 구조, 차원, attention/bias 구조, normalization 방식
+- mesh representation 차원
+- distribution 기반 sampling 공식
+- loss function의 구체적인 조합 및 계산 과정
+
+---
+
+# 5. ⭐ Reward Model (Freeze된 품질 평가 네트워크)
+학습 시 actor가 생성한 mesh를 평가하기 위해 **별도의 품질 측정 모델**을 사용합니다.
+
+### 기능
+- 오디오–메쉬 간 **lip-sync**, **realism**, **temporal consistency** 등을 측정  
+- freeze 상태로 사용되며, actor 업데이트를 위한 reward를 제공
+
+### 비공개 처리
+- backbone/score-head architecture  
+- 입력 clip 형식, 차원  
+- score 계산 방식  
+
+---
+
+# 6. 🧠 Reinforcement Learning Loop (High-Level Description Only)
+본 프로젝트는 supervised loss와 reinforcement signal을 함께 사용합니다.
+
+### 전체 흐름
+1) Actor가 예측 메쉬 생성  
+2) Reward 모델이 품질 점수 계산  
+3) Critic이 예측 안정성을 돕는 방향으로 평가  
+4) Actor는 높은 품질 방향으로 업데이트  
+5) Critic은 reward를 더 잘 예측하도록 업데이트  
+6) Supervised 학습과 RL 신호가 함께 최종 loss 구성
+
+### 비공개 처리
+- advantage 계산식  
+- actor/critic loss 공식  
+- weight/scale 값  
+- log_prob 기반 정책 업데이트 방식  
+
+---
+
+# 7. 🧪 Validation
+- deterministic 모드로 mesh를 생성하여 품질 지표를 기록  
+- LVE·FDD 등 일부 지표는 내부 reference에 의해 계산되나 공개 범위 최소화
+
+---
+
+# 8. 🧫 Test / Inference (Demo Version)
+- best checkpoint가 주어질 경우 전체 subject 조건에서 메쉬 생성  
+- 결과는 .npy 또는 .obj 등 다양한 포맷으로 저장 가능  
+- public repo에는 checkpoint가 포함되지 않으며, demo용 dummy predictor만 제공됨
+
+---
+
+# 🚫 포함되지 않는 항목 (Important)
+본 공개 버전에는 아래 파일/구현이 절대 포함되지 않습니다.
+
+- 실제 학습된 모델 weight (*.pt, *.pth)
+- wav2vec 기반 음성 인코더 구현
+- mesh reconstruction/decoder 내부 구조
+- reward backbone 및 score head 상세 구조
+- reinforcement learning 공식, weighting, optimizer 세부 로직
+- 데이터셋(wav, mel, vertices, template, mask)
+- mask index, facial region mapping 등 research-critical 정보
+- 논문 구현과 직접 연결되는 차원/수식/알고리즘
+
+---
+
 ```bash
 ### 1) 🔧 Config 로드 (Hydra)
  - configs/config.yaml 불러오기
