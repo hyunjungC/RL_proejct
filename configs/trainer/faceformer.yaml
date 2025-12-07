@@ -1,0 +1,22 @@
+# Trainer config
+lr: 0.0001
+gradient_accumulation_steps: 1
+max_epoch: 100
+device: cuda
+save_dir: checkpoints
+last_train: 0
+load_path: null #checkpoints/faceformer_hj/best.pt 
+result_path: result
+
+# RL weights
+actor_weight: 0.0005 #0.0005
+critic_weight: 0.001 #0.001
+reward_scale: 1.0 #1.0    # reward = (lip+real) * reward_scale
+head_lr: 0.0001      # ScoreHead 전용 학습률 (모델 lr보다 크게 설정 가능)
+
+# Guidance/Reward
+guidance_weight: 0.0000001
+guidance_batch_size: 8
+model_type: original
+guidance_model_path: /workspace/RL-3D3M/models/RewardModel/checkpoints/model_loss.pth
+guidance_head_model_path: /workspace/RL-3D3M/models/SelfTalk/reward_model/checkpoints/train_v4/best.pt

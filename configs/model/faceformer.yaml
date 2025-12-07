@@ -1,0 +1,6 @@
+# Model config
+name: faceformer
+feature_dim: 64
+vertice_dim: 15069  # 5023 * 3
+period: 30
+use_stochastic: true

@@ -1,0 +1,26 @@
+hydra:
+  run:
+    dir: .
+  output_subdir: null
+  job:
+    chdir: false
+
+defaults:
+  - model: faceformer ## selftalk or faceformer
+  - dataset: style ## nostyle or style
+  - trainer: faceformer ## selftalk or faceformer
+
+train: true
+test: true
+
+# Weights & Biases
+wandb_project: RL-3D3M
+wandb_name: faceformer_hj
+wandb_entity: null #CVIP_sogang >> 팀 계정에 올릴 수 있음
+wandb_mode: online  # online | offline | disabled
+
+save_dir: checkpoints
+# Reward model paths (preferred source for guidance ckpts)
+reward:
+  guidance_model_path: checkpoints/reward/model_loss.pth
+  guidance_head_model_path: checkpoints/reward/v4_best.pt
