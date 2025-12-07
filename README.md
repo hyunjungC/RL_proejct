@@ -22,6 +22,7 @@ Reward 모델을 활용하여 lip realism·motion naturalness 기반의 강화�
 ✅
 ```
 
+```markdown
 ## ✅ 구조 및 파일 역할
 RL-VOCASET_my_copy_check_3_copy/
 ├── pycache/
@@ -42,6 +43,9 @@ RL-VOCASET_my_copy_check_3_copy/
 ├── README.md
 ├── render.py
 └── reward_score.py
+```
+
+
 ```bash
 - `main.py` : Hydra 엔트리. config 읽고 데이터로더/모델/리워드/트레이너 객체를 엮어 train/test 실행.
 - `dataset/dataloader_style.py` : VOCASET 스타일 데이터 로더 인터페이스.
