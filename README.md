@@ -61,34 +61,7 @@ RL-VOCASET/
 
 
 ##  ✅Main 파이프라인 흐름 및 요약 (`/workspace/RL-VOCASET/main.py` 기준)
-```
-[Dataloader]
-   ↓
-(audio, vertice_GT, template, subject, rep_audio_mel)
-   ↓
-──────────────────────────────────────────────────────────
-             [Actor: FaceFormer]
- audio ─────→ wav2vec2 encoder ─→ audio_feat ──┐
- template, subject, GT ───────→ decoder ───────┤
-                                               ↓
-                   vertice_mu, sigma_head → dist → vertice_sample
-──────────────────────────────────────────────────────────
-          │                                    │
-          │                                    │
-          ▼                                    ▼
-[Supervised Loss]                        [Reward/Critic Model]
- MSE(vertice_mu, GT)                       lip_score, real_score, value
-          │                                    │
-          ▼                                    ▼
-                                advantage = reward - value
-──────────────────────────────────────────────────────────
-         [Actor loss]     [Critic loss]
-──────────────────────────────────────────────────────────
-                 total_loss = sup + actor + critic
-──────────────────────────────────────────────────────────
-                 optimizer update (Actor + critic_head)
 
-```
 1) **Hydra 설정 로드**  
    - `configs/config.yaml` 기본값: model=faceformer, dataset=style, trainer=faceformer
 2) **데이터 로더 준비**  
