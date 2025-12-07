@@ -1,7 +1,7 @@
 ```markdown
 # RL-project
 ```
-
+✅. Scope & Audience
 > 이 저장소는 **기술 공개 범위를 최소화한 데모용 구조(skeleton)**입니다.  
 > 실제 모델, 학습 코드, 체크포인트, 데이터셋은 **포함되어 있지 않습니다.**  
 > 본 문서는 **전체 파이프라인 이해**를 위한 요약이며,  
@@ -35,11 +35,21 @@
 Reward 모델을 활용하여 lip realism·motion naturalness 기반의 강화학습 신호를 부여함으로써,
 정확도 중심의 supervised learning을 넘어 더 사람다운(face-like) 움직임을 학습하도록 설계했습니다.
 
+## ✅ 3. Dataset & Data Structure (High-Level)
+
+이 프로젝트는 speech-to-3D mesh 작업을 위해 다음과 같은 데이터 구조를 사용합니다:
+
+   - Raw audio (.wav): `vocaset/wav/`
+   - Mel-spectrogram (.npy): `vocaset/wav_npy/`
+   - Ground-truth vertex sequences: `vocaset/vertices_npy/`
+   - Template mesh: `vocaset/templates.pkl`
+   - (Optional, test) FLAME face region masks: `vocaset/FLAME_masks.pkl`
+   - Reward model checkpoints are loaded from `checkpoints/reward/`
+   - 모든 출력 및 학습 체크포인트는 `checkpoints/<wandb_name>/` 아래 저장됩니다.
 
 
 
-
-## ✅ 3. Main 파이프라인 흐름 및 요약 (`/workspace/RL-VOCASET/main.py` 기준)
+## ✅ 4. Main 파이프라인 흐름 및 요약 (`/workspace/RL-VOCASET/main.py` 기준)
 
    1) **Hydra 설정 로드**  
       - `configs/config.yaml` 기본값: model=faceformer, dataset=style, trainer=faceformer
@@ -171,7 +181,7 @@ Reward 모델을 활용하여 lip realism·motion naturalness 기반의 강화�
    
    ---
 
-## 📁 4 .Repository Structure (Demo Skeleton)
+## 📁 5 .Repository Structure (Demo Skeleton)
 ```
 RL-VOCASET/
 ├── checkpoints/              # (비어 있음) 실제 모델 가중치는 포함되지 않음
