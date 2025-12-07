@@ -1,6 +1,6 @@
 # RL-VOCASET (Demo Skeleton)
 
-> 이 리포는 `/workspace/RL-VOCASET_my_copy_check_3` 기준 학습/추론 파이프라인의 구조와 흐름만 보여주는 데모용입니다. 실제 학습·모델·RL/Reward 구현과 체크포인트는 포함하지 않습니다.
+> 이 리포는 `RL_project` 기준 학습/추론 파이프라인의 구조와 흐름만 보여주는 데모용입니다. 실제 학습·모델·RL/Reward 구현과 체크포인트는 포함하지 않습니다.
 
 ## 실제 파이프라인 흐름 ( `/workspace/RL-VOCASET_my_copy_check_3/main.py` 기준 )
 1) **Hydra 설정 로드**  
