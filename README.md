@@ -40,22 +40,22 @@ Reward 모델을 활용하여 lip realism·motion naturalness 기반의 강화�
 
 ## ✅ 3.Main 파이프라인 흐름 및 요약 (`/workspace/RL-VOCASET/main.py` 기준)
 
-1) **Hydra 설정 로드**  
-   - `configs/config.yaml` 기본값: model=faceformer, dataset=style, trainer=faceformer
-2) **데이터 로더 준비**  
-   - `dataset/dataloader_style.py` 로 wav → mel, vertices, template 로드
-3) **Actor 모델 빌드**  
-   - `models/faceformer/model.py` (오디오 인코더 `models/wav2vec.py` 포함)
-4) **Reward 백본/헤드 로드**  
-   - `models/reward/models/modeling.py` (SpeechMeshTransformer)  
-   - `models/reward/models/head_v2.py` (lip/real/value 헤드)
-5) **학습 루프**  
-   - `trainer/faceformer/trainer.py`에서 sup loss + RL(actor/critic) 조합 학습
-6) **테스트**  
-   - 같은 트레이너에서 style-dependent 테스트 수행
-7) **저장**  
-   - `checkpoints/{wandb_name}/best.pt` 등에 모델/헤드 저장
-      - 
+   1) **Hydra 설정 로드**  
+      - `configs/config.yaml` 기본값: model=faceformer, dataset=style, trainer=faceformer
+   2) **데이터 로더 준비**  
+      - `dataset/dataloader_style.py` 로 wav → mel, vertices, template 로드
+   3) **Actor 모델 빌드**  
+      - `models/faceformer/model.py` (오디오 인코더 `models/wav2vec.py` 포함)
+   4) **Reward 백본/헤드 로드**  
+      - `models/reward/models/modeling.py` (SpeechMeshTransformer)  
+      - `models/reward/models/head_v2.py` (lip/real/value 헤드)
+   5) **학습 루프**  
+      - `trainer/faceformer/trainer.py`에서 sup loss + RL(actor/critic) 조합 학습
+   6) **테스트**  
+      - 같은 트레이너에서 style-dependent 테스트 수행
+   7) **저장**  
+      - `checkpoints/{wandb_name}/best.pt` 등에 모델/헤드 저장
+       
    ### 1) Main Workflow Summary (`python main.py`)
    모델을 실행하면 아래와 같은 순서로 파이프라인이 진행됩니다.
    
