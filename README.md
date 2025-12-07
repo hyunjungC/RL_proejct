@@ -11,9 +11,13 @@
 
 #  🎮 Speech-to-3D Face Animation 
 
+## ✅1. Overview
+<img width="1345" height="479" alt="image" src="https://github.com/user-attachments/assets/eb7943ce-6e47-4447-a66b-6fff0682a755" />
 
 
 
+
+## ✅2. Project Goals
 ([🔗 : 발표자료](https://www.canva.com/design/DAG6h43SCnU/Bg0qUI8bYz8JZkyo-mPMCg/edit?utm_content=DAG6h43SCnU&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton) )
 
 
@@ -36,7 +40,7 @@ Reward 모델을 활용하여 lip realism·motion naturalness 기반의 강화�
 
 
 
-##  ✅Main 파이프라인 흐름 및 요약 (`/workspace/RL-VOCASET/main.py` 기준)
+## ✅ 3.Main 파이프라인 흐름 및 요약 (`/workspace/RL-VOCASET/main.py` 기준)
 
 1) **Hydra 설정 로드**  
    - `configs/config.yaml` 기본값: model=faceformer, dataset=style, trainer=faceformer
@@ -53,7 +57,7 @@ Reward 모델을 활용하여 lip realism·motion naturalness 기반의 강화�
    - 같은 트레이너에서 style-dependent 테스트 수행
 7) **저장**  
    - `checkpoints/{wandb_name}/best.pt` 등에 모델/헤드 저장
-###  1. Main Workflow Summary (`python main.py`)
+###  1) Main Workflow Summary (`python main.py`)
 모델을 실행하면 아래와 같은 순서로 파이프라인이 진행됩니다.
 
 Config 로드 → 데이터 준비 → Actor 모델 추론 → Reward 평가 → RL 학습 → Validation/Test
@@ -62,14 +66,14 @@ Config 로드 → 데이터 준비 → Actor 모델 추론 → Reward 평가 →
 
 ---
 
-### 2. 🔧 Config & Environment Loading
+### 2) 🔧 Config & Environment Loading
 - Hydra 기반 설정 로딩
 - 모델 종류, 데이터셋 타입, 학습/평가 옵션을 포함한 high-level configuration
 - 실제 training parameter, architecture detail은 비공개
 
 ---
 
-### 3. 🎧 Data Loader (Audio & Mesh Preparation)
+### 3) 🎧 Data Loader (Audio & Mesh Preparation)
 입력으로 사용되는 데이터는 다음과 같은 형태로 구성됩니다.
 
 ##### 포함 요소
@@ -90,14 +94,14 @@ Config 로드 → 데이터 준비 → Actor 모델 추론 → Reward 평가 →
 
 ---
 
-### 4. 🧑‍🏫 Actor Model (Face Animation Generator)
+### 4) 🧑‍🏫 Actor Model (Face Animation Generator)
 Actor 모델은 다음 기능을 수행합니다.
 
 ##### 모델 역할
 - 음성 인코더가 추출한 speech embedding과  
   template mesh · subject 정보 등을 결합하여  
   **타임라인에 따른 3D 얼굴 메쉬 시퀀스를 생성**합니다.
-- deterministic / stochastic 두 가지 모드로 실행 가능
+
 
 ##### 비공개(연구 보호) 처리
 - 인코더 구조, 차원, attention/bias 구조, normalization 방식
@@ -107,11 +111,11 @@ Actor 모델은 다음 기능을 수행합니다.
 
 ---
 
-### 5. ⭐ Reward Model (Freeze된 품질 평가 네트워크)
+### 5) ⭐ Reward Model (Freeze된 품질 평가 네트워크)
 학습 시 actor가 생성한 mesh를 평가하기 위해 **별도의 품질 측정 모델**을 사용합니다.
 
 ##### 기능
-- 오디오–메쉬 간 **lip-sync**, **realism**, **temporal consistency** 등을 측정  
+- 오디오–메쉬 간 **lip-sync**, **realism** 등을 측정  
 - freeze 상태로 사용되며, actor 업데이트를 위한 reward를 제공
 
 ##### 비공개 처리
@@ -121,7 +125,7 @@ Actor 모델은 다음 기능을 수행합니다.
 
 ---
 
-### 6. 🧠 Reinforcement Learning Loop (High-Level Description Only)
+### 6) 🧠 Reinforcement Learning Loop (High-Level Description Only)
 본 프로젝트는 supervised loss와 reinforcement signal을 함께 사용합니다.
 
 ##### 전체 흐름
@@ -140,16 +144,16 @@ Actor 모델은 다음 기능을 수행합니다.
 
 ---
 
-### 7. 🧪 Validation
-- deterministic 모드로 mesh를 생성하여 품질 지표를 기록  
-- LVE·FDD 등 일부 지표는 내부 reference에 의해 계산되나 공개 범위 최소화
+### 7) 🧪 Validation
+- baseline model(faceformer)가 mesh를 생성하여 품질 지표를 기록  
+
 
 ---
 
-### 8. 🧫 Test / Inference (Demo Version)
+### 8) 🧫 Test / Inference (Demo Version)
 - best checkpoint가 주어질 경우 전체 subject 조건에서 메쉬 생성  
-- 결과는 .npy 또는 .obj 등 다양한 포맷으로 저장 가능  
-- public repo에는 checkpoint가 포함되지 않으며, demo용 dummy predictor만 제공됨
+- 결과는 .npy 로 저장 가능  
+- public repo에는 checkpoint가 포함되지 않음음
 
 ---
 
@@ -167,7 +171,7 @@ Actor 모델은 다음 기능을 수행합니다.
 
 ---
 
-### 📁 Repository Structure (Demo Skeleton)
+## 📁 4.Repository Structure (Demo Skeleton)
 ```
 RL-VOCASET/
 ├── checkpoints/              # (비어 있음) 실제 모델 가중치는 포함되지 않음
