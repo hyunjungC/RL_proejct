@@ -18,12 +18,14 @@
 
 
 
-https://github.com/user-attachments/assets/3699e22f-c586-47de-855f-1e5e92084118
+https://github.com/user-attachments/assets/3699e22f-c586-47de-855f-1e5e92084118 / https://github.com/user-attachments/assets/99fce03f-fc62-4a03-8960-861d05a5cf09
 
 
 
 
 ## ✅2. Project Goals
+
+
 
 
 본 프로젝트의 최종 목표는 입력 음성에 맞추어 자연스럽게 움직이는 3D 얼굴 메쉬/영상을 생성하는 것입니다.
